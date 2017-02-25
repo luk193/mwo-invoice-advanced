@@ -4,9 +4,11 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
-import pl.edu.agh.mwo.invoice.Invoice;
 import pl.edu.agh.mwo.invoice.product.DairyProduct;
 import pl.edu.agh.mwo.invoice.product.OtherProduct;
 import pl.edu.agh.mwo.invoice.product.Product;
@@ -16,6 +18,12 @@ public class InvoiceTest {
 	private static final String PRODUCT_1 = "Product 1";
 	private static final String PRODUCT_2 = "Product 2";
 	private static final String PRODUCT_3 = "Product 3";
+
+	@Before
+	public static void resetInvoiceNumber() {
+		Invoice.getInvoiceNumkber();
+
+	}
 
 	@Test
 	public void testEmptyInvoiceHasEmptySubtotal() {
@@ -121,6 +129,26 @@ public class InvoiceTest {
 
 	private void assertBigDecimalsAreEqual(BigDecimal expected, BigDecimal actual) {
 		assertEquals(expected.stripTrailingZeros(), actual.stripTrailingZeros());
+	}
+
+	@Test
+	public void testInvoiceNumber() {
+		Invoice invoice1 = createEmptyInvoice();
+		Invoice invoice2 = createEmptyInvoice();
+		Invoice invoice3 = createEmptyInvoice();
+
+		Assert.assertThat(invoice1.getInvoiceNumber(), Matchers.greaterThan(-1));
+		assertEquals(1, invoice2.getInvoiceNumber());
+		assertEquals(2, invoice3.getInvoiceNumber());
+	}
+
+	@Test
+	public void testTwoInvoicesHasdifferentNumber() {
+		Invoice invoice1 = createEmptyInvoice();
+		Invoice invoice2 = createEmptyInvoice();
+
+		Assert.notequals(invoice1.getInvoiceNumber(), invoice2.getInvoiceNumber());
+
 	}
 
 }
