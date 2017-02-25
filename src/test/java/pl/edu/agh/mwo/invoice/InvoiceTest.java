@@ -19,11 +19,11 @@ public class InvoiceTest {
 	private static final String PRODUCT_2 = "Product 2";
 	private static final String PRODUCT_3 = "Product 3";
 
-	@Before
-	public static void resetInvoiceNumber() {
-		Invoice.getInvoiceNumkber();
+	//@Before
+	//public static void resetInvoiceNumber() {
+		//Invoice.getInvoiceNumkber();
 
-	}
+	//}
 
 	@Test
 	public void testEmptyInvoiceHasEmptySubtotal() {
@@ -149,6 +149,40 @@ public class InvoiceTest {
 
 		Assert.notequals(invoice1.getInvoiceNumber(), invoice2.getInvoiceNumber());
 
+	}
+	
+	@Test
+	public void testPrintedInvoiceHasNumber(){
+		Invoice invoice = createEmptyInvoice();
+		
+		int number = invoice.getInvoiceNumber();
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice,Matchers.containsString(String.valueOf(number)));
+		
+	}
+	
+	@Test
+	public void testPrintedInvoiceHasProductName(){
+		Invoice invoice = createEmptyInvoice();
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal(100)));
+		
+		int number = invoice.getInvoiceNumber();
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice,Matchers.containsString(String.valueOf(number)));
+		
+	}
+	
+	@Test
+	public void testPrintedInvoicee(){
+		Invoice invoice = createEmptyInvoice();
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal(100)));
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal(200)));
+		
+		
+		int number = invoice.getInvoiceNumber();
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice,Matchers.containsString("Liczba produktow: 2"));
+		
 	}
 
 }

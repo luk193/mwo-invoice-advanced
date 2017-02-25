@@ -7,20 +7,22 @@ import java.util.Map;
 import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
-	private int invoiceNumber;
+	private int number;
 	private static int  nextNumber =0;
 	
 	
 
 	public Invoice() {
-		this.invoiceNumber = nextNumber ;
+		this.number = nextNumber ;
 		nextNumber++;
 		
 
 	}
+	
+	
 
 	public int getInvoiceNumber() {
-		return this.invoiceNumber;
+		return this.number;
 	}
 
 	private Map<Product, Integer> products = new HashMap<Product, Integer>();
@@ -33,7 +35,12 @@ public class Invoice {
 		if (product == null || quantity <= 0) {
 			throw new IllegalArgumentException();
 		}
-		products.put(product, quantity);
+		if (products.containsKey(product)){
+			products.put(product, products.get(product) +quantity);
+		}
+		else{
+			products.put(product, quantity);
+		}
 	}
 
 	public BigDecimal getNetTotal() {
@@ -56,5 +63,21 @@ public class Invoice {
 			totalGross = totalGross.add(product.getPriceWithTax().multiply(quantity));
 		}
 		return totalGross;
+	}
+
+	public String printedVersion() {
+		String printed = String.valueOf(number);
+		for (Product product: products.keySet()){
+			printed += "\n" + product.getName();
+			printed += ", " + product.getClass().getName();
+			printed += ", " + products.get(product);
+			
+			
+		}
+		printed += "\n "+ "Liczba produktow: "+ products.size();
+		
+		return printed;
+		
+		
 	}
 }
